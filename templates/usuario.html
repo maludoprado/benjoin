@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> Benjoin - Giros e compras - {{titulo}}</title>
+</head>
+
+<body>
+    <h1> Bem vindo ao Benjoin</h1>
+    <p><a href={{url_for("usuario")}}> Cadastro Usuario</a></p>
+    <p><a href={{url_for("anuncio")}}> Cadastro Anuncio</a></p>
+    <p><a href={{url_for("relVendas")}}> Relatorio de Vendas</a></p>
+    <p><a href={{url_for("relCompras")}}> Relatorio de Compra</a></p>
+    <p><a href={{url_for("anuncio")}}> Anuncios</a></p>
+    <form action="caduser" method="post">
+        <p><label for="user">Nome</label></p>
+        <p><input type="text" id="nome" name="nome"></p>
+
+        <p><label for="user">Email</label></p>
+        <p><input type="text" id="email" name="email"></p>
+
+        <p><label for="user">Senha</label></p>
+        <p><input type="text" id="senha" name="senha"></p>
+        <p><input type="submit" value="Cadastrar"></p>
+
+    </form>
+    
+   
+
+</body>
+</html>
