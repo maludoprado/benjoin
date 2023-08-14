@@ -58,6 +58,11 @@ class Anuncio(db.Model):
         self.cat_id = cat_id
         self.usu_id = usu_id
 
+
+@app.errorhandler(404)
+def paginanaoencontrada(error):
+    return render_template('pagnaoencontrada.html')
+
 @app.route("/")
 def index():
     return render_template('index.html')
@@ -73,6 +78,32 @@ def novousuario():
     db.session.commit()
     return redirect(url_for('usuario'))
 
+@app.route("/usuario/detalhes/<int:id>")
+def buscausuario(id):
+    usuario = Usuario.query.get(id)
+    return usuario.nome 
+
+@app.route("/usuario/editar/<int:id>", methods=['GET','POST'])
+def editarusuario(id):
+    usuario = Usuario.query.get(id)
+    if request.method == 'POST':
+        usuario.nome = request.form.get('user')
+        usuario.email = request.form.get('email')
+        usuario.senha = request.form.get('passwd')
+        usuario.end = request.form.get('end')
+        db.session.add(usuario)
+        db.session.commit()
+        return redirect(url_for('usuario'))
+
+    return render_template('euusuario.html', usuario = usuario, titulo="Usuario")
+
+@app.route("/usuario/deletar/<int:id>")
+def deletarusuario(id):
+    usuario = Usuario.query.get(id)
+    db.session.delete(usuario)
+    db.session.commit()
+    return redirect(url_for('usuario'))  
+
 @app.route("/cad/anuncio")
 def anuncio():
     return render_template('anuncio.html', categorias = Categoria.query.all(), anuncios = Anuncio.query.all(), titulo = "Anuncios")
@@ -84,11 +115,7 @@ def novoanuncio():
     db.session.add(anuncio)
     db.session.commit()
     return redirect(url_for('anuncio'))
-
-@app.route("/usuario/detalhe/<int:id>")
-def buscausuario(id):
-    usuario = Usuario.query.get(id)
-    return usuario.nome 
+ 
 
 @app.route("/anuncios/pergunta")
 def pergunta():
@@ -131,6 +158,6 @@ if __name__ == 'benjoin':
 # Mas no caso de executar o script via cmd, bash ou powershell, ele irá reconhecer o arquivo pelo seu nome, nesse caso, benjoin. Por isso, se estiver rodando direto na IDE,
 # deixe if __name__ == '__main__':, mas se estiver rodando no cmd, bash ou powershell, utilize if __name__== 'nome_do_arquivo':       
     print('testesom')
-    with app.app_context():
+    with app.app_context():  
         db.create_all()
     

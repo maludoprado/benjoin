@@ -38,6 +38,7 @@
                     <th>E-mail</th>
                     <th>Senha</th>
                     <th>Endereço</th>
+                    <th>Deletar</th>
 
                 </tr>
             </thead>
@@ -48,6 +49,9 @@
                     <td>{{ usuario.email }}</td>
                     <td>{{ usuario.senha }}</td>
                     <td>{{ usuario.end }}</td>
+                    <td><a href={{ url_for("editarusuario",id=usuario.id) }}>Editar?</a></td>
+                    <td><a href={{ url_for("deletarusuario",id=usuario.id) }}>Deletar?</a></td>
+                    
 
                 </tr>
                 {% endfor %}
