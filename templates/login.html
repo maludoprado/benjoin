@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Benjoin - Giros e compras- Login</title>
+        <link rel="stylesheet" href="../static/css/bootstrap.css">
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="page-header"
+                style="height: 10vh; display: flex; justify-content: space-around; align-items: center; margin-top: 5px; margin-bottom: -10px">
+                <h1 class="text-danger"> Bem vindo Benjoin - Giros e compras
+                </h1>
+            </div>
+            <div class="container">
+                <div class="page-header"
+                    style="height: 10vh; display: flex; justify-content: space-around; align-items: center; margin-top: 5px; margin-bottom: -10px">
+                    <h1 class="text-danger"> Login </h1>
+                </div>
+                <form action="/login" method="post">
+                    <p><label for="email">Email</label>
+                        <input type="text" id="email" name="email"></p>
+
+                    <p><label for="senha">Senha</label>
+                        <input type="senha" id="senha" name="senha"></p>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-danger">Logar</button>
+
+                    </div>
+
+                    <div class="container">
+                        <div class="page-header"
+                            style="height: 10vh; display: flex; justify-content: space-around; align-items: center;">
+                            <a href={{url_for("usuario")}} class="text-danger">Novo por aqui?
+                                Cadastre-se agora!</a>
+                        </div>
+                    </div>
+                </form>
+                <footer class="row">
+                    <div class="col-12">
+                        <p>Copyright © 2023</p>
+                    </div>
+                </footer>
+            </body>
+        </html>

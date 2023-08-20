@@ -7,7 +7,10 @@ from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from flask import url_for
 from flask import redirect
-
+from flask_login import (current_user, LoginManager,
+                             login_user, logout_user,
+                             login_required)
+import hashlib
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://testeuser:benjoin23@localhost:3306/mybenjo'
@@ -15,12 +18,19 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+app.secret_key = 'bjoinémaislegal'
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+
+
 class Usuario(db.Model):
     __tablename__ = "usuario"
     id = db.Column('usu_id', db.Integer, primary_key=True)
     nome = db.Column('usu_nome', db.String(256))
     email = db.Column('usu_email', db.String(256))
-    senha = db.Column('usu_senha', db.String(45))
+    senha = db.Column('usu_senha', db.String(256))
     end = db.Column('usu_end', db.String(256))
 
 
@@ -29,6 +39,18 @@ class Usuario(db.Model):
         self.email= email
         self.senha = senha
         self.end = end
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.id)     
       
 class Categoria(db.Model):
     __tablename__ = "categoria"
@@ -59,21 +81,65 @@ class Anuncio(db.Model):
         self.usu_id = usu_id
 
 
+class Pergunta(db.Model):
+    __tablename__ = "pergunta"
+    id = db.Column('perg_id', db.Integer, primary_key=True)
+    perguna = db.Column('perg_pergunta', db.String(256))
+    resposta = db.Column('perg_resposta', db.String(256))
+    usu_id = db.Column('usu_id', db.Integer, db.ForeignKey("usuario.usu_id"))
+    anu_id = db.Column('anu_id', db.Integer, db.ForeignKey("anuncio.anu_id"))
+
+    def __init__(self, pergunta, resposta, usu_id, anu_id):
+        self.pergunta = pergunta
+        self.resposta = resposta
+        self.usu_id = usu_id
+        self.anu_id = anu_id
+
+
 @app.errorhandler(404)
 def paginanaoencontrada(error):
-    return render_template('pagnaoencontrada.html')
+    return render_template('paginanaoencontrada.html')
+
+@login_manager.user_loader
+def load_user(id):
+    return Usuario.query.get(id)
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    global userlogado
+    if request.method == 'POST':
+        email = request.form.get('email')
+        senha = hashlib.sha512(str(request.form.get('senha')).encode("utf-8")).hexdigest()
+        user = Usuario.query.filter_by(email=email, senha=senha).first()
+        if user:
+            userlogado = user.id
+            login_user(user)
+            return redirect(url_for('index'))   
+        else:
+            return redirect(url_for('login'))
+        
+    return render_template('login.html')
+
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 @app.route("/")
+@login_required
 def index():
     return render_template('index.html')
-   
+
 @app.route("/cad/usuario")
+
 def usuario():
     return render_template('usuario.html', usuarios = Usuario.query.all(), titulo="Usuario")
 
 @app.route("/usuario/novo", methods=['POST'])
-def novousuario():
-    usuario = Usuario(request.form.get('nome'), request.form.get('email'),request.form.get('senha'), request.form.get('end'))
+def criarusuario():
+    hash = hashlib.sha512(str(request.form.get('senha')).encode("utf-8")).hexdigest()
+    usuario = Usuario(request.form.get('user'), request.form.get('email'),hash,request.form.get('end'))
     db.session.add(usuario)
     db.session.commit()
     return redirect(url_for('usuario'))
@@ -89,8 +155,10 @@ def editarusuario(id):
     if request.method == 'POST':
         usuario.nome = request.form.get('user')
         usuario.email = request.form.get('email')
-        usuario.senha = request.form.get('passwd')
+        usuario.senha = hashlib.sha512(str(request.form.get('passwd')).encode("utf-8")).hexdigest()
+        usuario.senha =request.form.get('senha')
         usuario.end = request.form.get('end')
+      
         db.session.add(usuario)
         db.session.commit()
         return redirect(url_for('usuario'))
@@ -99,12 +167,13 @@ def editarusuario(id):
 
 @app.route("/usuario/deletar/<int:id>")
 def deletarusuario(id):
-    usuario = Usuario.query.get(id)
+    usuario = Usuario.query.get(id)    
     db.session.delete(usuario)
     db.session.commit()
     return redirect(url_for('usuario'))  
 
 @app.route("/cad/anuncio")
+@login_required
 def anuncio():
     return render_template('anuncio.html', categorias = Categoria.query.all(), anuncios = Anuncio.query.all(), titulo = "Anuncios")
 
@@ -161,3 +230,9 @@ if __name__ == 'benjoin':
     with app.app_context():  
         db.create_all()
     
+
+
+
+#def deletaranuncios(id):
+#vc tem que pegar todos os anuncios pelo codigo do usuario e depois fazer um for deletando eles 
+#

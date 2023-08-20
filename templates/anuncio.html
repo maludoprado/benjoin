@@ -3,70 +3,128 @@
     <head>
 
         <title> Benjoin - Anuncios</title>
+        <link rel="stylesheet" href="../static/css/bootstrap.css">
     </head>
     <body>
-        <h1> Anuncios</h1>
-        <p><a href={{url_for("usuario")}}> Cadastro Usuario</a></p>
-        <p><a href={{url_for("anuncio")}}> Cadastro Anuncio</a></p>
-        <p><a href={{url_for("relVendas")}}> Relatorio de Vendas</a></p>
-        <p><a href={{url_for("relCompras")}}> Relatorio de Compra</a></p>
-        <p><a href={{url_for("anuncio")}}> Anuncios</a></p>
-        <p><a href={{url_for("categoria")}}> Categorias</a></p>
-        <h4>Seus anuncios aparecerão aqui!</h4>
+        <div class="container">
+            <div class="page-header"
+                style="height: 10vh; display: flex; justify-content: space-around; align-items: center; margin-top: 5px; margin-bottom: -10px">
+                <h1 class="text-danger"> Benjoin - Giros e compras </h1>
+            </div>
 
-        
-        <h4>Cadastro de {{titulo}}</h4>
-        <form action="/anuncio/novo" method="post">
-            <p><label for="nome">Nome</label>
-            <input type="text" id="nome" name="nome"></p>
+            <div class="container">
+                <div class="page-header"
+                    style="height: 10vh; display: flex; justify-content: space-around; align-items: center; margin-top: 5px; margin-bottom: -10px">
 
-            <p><label for="desc">Desc</label>
-            <textarea rows="4" cols="50" id="desc" name="desc"></textarea></p>
+                    <a href={{ url_for("usuario")}} class="text-danger">
+                        Cadastro Usuario</a>
+                    <a href={{ url_for("anuncio")}} class="text-danger">
+                        Cadastro Anuncio</a>
+                    <a href={{ url_for("relVendas")}} class="text-danger">
+                        Relatorio de Vendas</a>
+                    <a href={{ url_for("relCompras")}} class="text-danger">
+                        Relatorio de Compra</a>
+                    <a href={{ url_for("anuncio")}} class="text-danger">
+                        Anuncios</a>
+                    <a href={{ url_for("categoria")}} class="text-danger">
+                        Categorias</a>
+                    <a href={{ url_for("pergunta")}} class="text-danger">
+                        Perguntas</a>
+                    <a href={{ url_for("logout") }} class="text-danger"> Logout</a>
+                </div>
+            </div>
 
-            <p><label for="qtd">Quantidade</label>
-            <input type="text" id="qtd" name="qtd"></p>
+            <div class="container">
+                <div class="page-header"
+                    style="height: 10vh; display: flex; justify-content: space-around; align-items: center; margin-top: 5px; margin-bottom: -10px">
+                    <h1 class="text-danger"> Anuncio</h1>
+                </div>
+                <form action="/anuncio/novo" method="post">
+                    <div class="form-group">
+                        <label for="nome">Nome</label>
+                        <input type="text" class="form-control" id="nome"
+                            name="nome">
+                    </div>
 
-            <p><label for="preco">Preco</label>
-            <input type="text" id="preco" name="preco"></p>
+                    <div class="form-group">
+                        <label for="desc">Descrição</label>
+                        <textarea rows="4" cols="50" id="desc" name="desc"></textarea>
 
-            <p><label for="cat">Categoria</label>
-            <select id="cat" name="cat">
-                    {% for categoria in categorias %}
-                        <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
-                    {% endfor %}
-            </select></p>
+                    </div>
 
-            <p><label for="usu">Usuario</label>
-                <input type="text" id="uso" name="uso"></p>
+                    <div class="form-group">
 
-            <p><input type="submit" value="Cadastrar"></p>
-        </form>
+                        <label for="qtd">Quantidade</label>
+                        <input type="text" class="form-control" id="qtd"
+                            name="qtd">
+                    </div>
+                    <div class="form-group">
 
-        <h4>Lista de {{titulo}}</h4>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Desc</th>
-                    <th>Qtd</th>
-                    <th>Preco</th>
-                    <th>Categoria</th>
-                </tr>
-            </thead>
-            
-            <tbody>
-                {% for anuncio in anuncios %}
-                <tr>
-                    <td>{{ anuncio.nome }}</td>
-                    <td>{{ anuncio.desc }}</td>
-                    <td>{{ anuncio.qtd }}</td>
-                    <td>{{ anuncio.preco }}</td>
-                    <td>{{ anuncio.cat_id }}</td>
+                        <label for="preco">Preco</label>
+                        <input type="text" class="form-control" id="preco"
+                            name="preco">
+                    </div>
 
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    <div class="form-group">
 
-    </body>
-</html>
+                        <label for="cat">Categoria</label>
+                        <select id="cat" name="cat">
+                            {% for categoria in categorias %}
+                            <option value="{{ categoria.id }}">{{ categoria.nome
+                                }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="usu">Usuario</label>
+                        <input type="text" class="form-control" id="uso"
+                            name="uso">
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-danger">Cadastrar</button>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="container">
+                <div class="page-header">
+                    <h1 class="text-danger"> Lista de {{titulo}}</h1>
+                </div>
+                <table
+                    class="table table-striped table-responsive table-bordered">
+                    <thead class="thread-default">
+                        <tr>
+
+                            <th>Nome</th>
+                            <th>Desc</th>
+                            <th>Qtd</th>
+                            <th>Preco</th>
+                            <th>Categoria</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for anuncio in anuncios %}
+                        <tr>
+                            <td>{{ anuncio.nome }}</td>
+                            <td>{{ anuncio.desc }}</td>
+                            <td>{{ anuncio.qtd }}</td>
+                            <td>{{ anuncio.preco }}</td>
+                            <td>{{ anuncio.cat_id }}</td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <footer class="row">
+                    <div class="col-12">
+                        <p>Copyright © 2023</p>
+                    </div>
+                </footer>
+
+            </body>
+        </html>

@@ -13,8 +13,8 @@
         <p><label for="email">E-mail</label>
         <input type="text" id="email" name="email" value="{{usuario.email}}"></p>       
 
-        <p><label for="passwd">Password</label>
-        <input type="text" id="passwd" name="passwd" value="{{usuario.senha}}"></p>
+        <p><label for="senha">Password</label>
+        <input type="text" id="senha" name="senha" value="{{usuario.senha}}"></p>
 
         <p><label for="end">Endereco</label>
         <input type="text" id="end" name="end" value="{{usuario.end}}"></p>
@@ -22,6 +22,12 @@
         <p><input type="submit" value="Alterar"></p>
     </form>
     <a href={{url_for("usuario")}}> Cancelar</a>
+
+    <footer class="row">
+        <div class="col-12">
+            <p>Copyright © 2023</p>
+        </div>
+    </footer>
 </body>
 
 </html>
